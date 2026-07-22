@@ -31,7 +31,7 @@ def ask_repeat_order():
     add_order = input("Enter your order: ")
     return add_order
 
-def print_cart_v2(cart):
+def print_cart(cart):
     print("=============================== Your Order ===============================")
     print("Your order:\n")
 
@@ -70,9 +70,7 @@ def print_cart_v2(cart):
 def main():
 
     cart = []
-
     cart.append(str(ask_first_time()))
-
     add_order = ask_repeat_order()
 
     while True:
@@ -85,7 +83,7 @@ def main():
             print("Invalid order. Please try again.")
             add_order = ask_repeat_order()
 
-    print_cart_v2(cart)
+    print_cart(cart)
 
 if __name__ == "__main__":
     main()
