@@ -62,9 +62,9 @@ def print_cart(cart):
     total_price = sum(price_data[item]['price'] for item in cart)
 
     print("\n=============================== Total Price ===============================")
-    print(f"{'Total Sales Price':<50} Rp {total_price:,}")
-    print(f"{'Service Charge and VAT':<50} Rp {round(total_price * 0.12):,}")
-    print(f"{'Total Price with Service Charge and VAT':<50} Rp {round(total_price * 1.12):,}")
+    print(f"{'Subtotal':<50} Rp {total_price:,}")
+    print(f"{'VAT + Service Charge (12%)':<50} Rp {round(total_price * 0.12):,}")
+    print(f"{'TOTAL':<50} Rp {round(total_price * 1.12):,}")
     print("==========================================================================")
 
 def main():
