@@ -1,18 +1,19 @@
 import json
+from inventory import update_inventory, check_inventory
+from receipt import print_cart, print_menu
 
 # Load the price data from the JSON file
-with open("price.json", "r") as f:
+with open("products.json", "r") as f:
     price_data = json.load(f)
 
-def print_menu():
-    print("Menu:")
-    for key, item in price_data.items():
-        print(f"{key}. {item['name']:<30} Rp {item['price']:,}")
+# Load inventory
+with open("inventory.json", "r") as t:
+    inventory_data = json.load(t)
 
 def ask_first_time(title="Welcome to Grand Hotdog of Ghaz"):
     while True:
         print(title)
-        print_menu()
+        print_menu(price_data)
         print(f"""Please select your order by entering the corresponding number.""")
         
         input_order = input("Enter your order: ")
@@ -31,41 +32,6 @@ def ask_repeat_order():
     add_order = input("Enter your order: ")
     return add_order
 
-def print_cart(cart):
-    print("=============================== Your Order ===============================")
-    print("Your order:\n")
-
-    print('Foods\n--------------------------------------------------------------------------')
-    food_item = {}
-    for item in cart:
-        if price_data[item]['type'] == 'food':
-            if item not in food_item.keys():
-                food_item[item] = 1
-            elif item in food_item.keys():
-                food_item[item] += 1
-    for item, quantity in food_item.items():
-        item_data = price_data[item]
-        print(f"{quantity} x {item_data['name']:<46} Rp {item_data['price'] * quantity:,}")
-
-    print('\nDrinks\n--------------------------------------------------------------------------')
-    drink_item = {}
-    for item in cart:
-        if price_data[item]['type'] == 'drink':
-            if item not in drink_item.keys():
-                drink_item[item] = 1
-            elif item in drink_item.keys():
-                drink_item[item] += 1
-    for item, quantity in drink_item.items():
-        item_data = price_data[item]
-        print(f"{quantity} x {item_data['name']:<46} Rp {item_data['price'] * quantity:,}")
-
-    total_price = sum(price_data[item]['price'] for item in cart)
-
-    print("\n=============================== Total Price ===============================")
-    print(f"{'Subtotal':<50} Rp {total_price:,}")
-    print(f"{'VAT + Service Charge (12%)':<50} Rp {round(total_price * 0.12):,}")
-    print(f"{'TOTAL':<50} Rp {round(total_price * 1.12):,}")
-    print("==========================================================================")
 
 def main():
 
@@ -83,7 +49,12 @@ def main():
             print("Invalid order. Please try again.")
             add_order = ask_repeat_order()
 
-    print_cart(cart)
+    if not check_inventory(cart, price_data, inventory_data):
+        print("Sorry, we don't have enough ingredients to fulfill your order.")
+        return
+
+    print_cart(cart, price_data)
+    update_inventory(cart, price_data, inventory_data)
 
 if __name__ == "__main__":
     main()

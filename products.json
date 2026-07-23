@@ -1,0 +1,36 @@
+{
+   "1":{
+      "name":"Original Hotdog"
+      , "price":20000
+      , "type":"food"
+      , "description":"A classic hotdog with mustard and ketchup."
+      , "recipe" : {
+         "bun" : 1,
+         "sausage" : 1,
+         "mustard" : 1,
+         "ketchup" : 1
+      }
+   },
+   "2":{
+      "name":"Cheese Hotdog"
+      , "price":25000
+      , "type":"food"
+      , "description":"A hotdog topped with melted cheese."
+      , "recipe" : {
+         "bun" : 1,
+         "sausage" : 1,
+         "cheese" : 1,
+         "mustard" : 1,
+         "ketchup" : 1
+      }
+   },
+   "3":{
+      "name":"Coke"
+      , "price":10000
+      , "type":"drink"
+      , "description":"A refreshing Coca-Cola."
+      , "recipe" : {
+         "coke" : 1
+      }
+   }
+}
