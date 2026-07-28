@@ -1,6 +1,7 @@
 import json
 from inventory import update_inventory, check_inventory
-from receipt import print_cart, print_menu
+from receipt import print_cart, print_menu, total_price_generator, print_cart_after_payment
+from payment import process_payment
 
 # Load the price data from the JSON file
 with open("products.json", "r") as f:
@@ -54,6 +55,14 @@ def main():
         return
 
     print_cart(cart, price_data)
+
+    subtotal, vat_service = total_price_generator(cart, price_data)
+    total_price = subtotal + vat_service
+
+    pay_amount, change_final = process_payment(total_price)
+
+    print_cart_after_payment(cart, price_data, pay_amount, change_final)
+
     update_inventory(cart, price_data, inventory_data)
 
 if __name__ == "__main__":
