@@ -3,6 +3,9 @@ def print_menu(price_data):
     for key, item in price_data.items():
         print(f"{key}. {item['name']:<30} Rp {item['price']:,}")
 
+def total_price_generator(cart, price_data):
+    subtotal = sum(price_data[item]['price'] for item in cart)
+    return subtotal, subtotal*0.12
 
 def print_cart(cart, price_data):
     print("=============================== Your Order ===============================")
@@ -31,12 +34,51 @@ def print_cart(cart, price_data):
         item_data = price_data[item]
         print(f"{quantity} x {item_data['name']:<46} Rp {item_data['price'] * quantity:,}")
 
-    total_price = sum(price_data[item]['price'] for item in cart)
+    subtotal, vat_service = total_price_generator(cart, price_data)
 
     print("\n=============================== Total Price ===============================")
-    print(f"{'Subtotal':<50} Rp {total_price:,}")
-    print(f"{'VAT + Service Charge (12%)':<50} Rp {round(total_price * 0.12):,}")
-    print(f"{'TOTAL':<50} Rp {round(total_price * 1.12):,}")
+    print(f"{'Subtotal':<50} Rp {round(subtotal):,}")
+    print(f"{'VAT + Service Charge (12%)':<50} Rp {round(vat_service):,}")
+    print(f"{'TOTAL':<50} Rp {round(subtotal + vat_service):,}")
     print("==========================================================================")
+
+
+def print_cart_after_payment(cart, price_data, pay_amount, change):
+    print("=============================== Your Order ===============================")
+
+    print('Foods\n--------------------------------------------------------------------------')
+    food_item = {}
+    for item in cart:
+        if price_data[item]['type'] == 'food':
+            if item not in food_item.keys():
+                food_item[item] = 1
+            elif item in food_item.keys():
+                food_item[item] += 1
+    for item, quantity in food_item.items():
+        item_data = price_data[item]
+        print(f"{quantity} x {item_data['name']:<46} Rp {item_data['price'] * quantity:,}")
+
+    print('\nDrinks\n--------------------------------------------------------------------------')
+    drink_item = {}
+    for item in cart:
+        if price_data[item]['type'] == 'drink':
+            if item not in drink_item.keys():
+                drink_item[item] = 1
+            elif item in drink_item.keys():
+                drink_item[item] += 1
+    for item, quantity in drink_item.items():
+        item_data = price_data[item]
+        print(f"{quantity} x {item_data['name']:<46} Rp {item_data['price'] * quantity:,}")
+
+    subtotal, vat_service = total_price_generator(cart, price_data)
+
+    print("\n=============================== Total Price ===============================")
+    print(f"{'Subtotal':<50} Rp {round(subtotal):,}")
+    print(f"{'VAT + Service Charge (12%)':<50} Rp {round(vat_service):,}")
+    print(f"{'TOTAL':<50} Rp {round(subtotal + vat_service):,}\n")
+    print(f"{'Payment':<50} Rp {round(pay_amount):,}" )
+    print(f"{'Change':<50} Rp {round(change):,}")
+    print("==========================================================================")
+
 
 
