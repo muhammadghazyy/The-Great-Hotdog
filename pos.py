@@ -55,14 +55,10 @@ def main():
         return
 
     print_cart(cart, price_data)
-
     subtotal, vat_service = total_price_generator(cart, price_data)
     total_price = subtotal + vat_service
-
     pay_amount, change_final = process_payment(total_price)
-
     print_cart_after_payment(cart, price_data, pay_amount, change_final)
-
     update_inventory(cart, price_data, inventory_data)
 
 if __name__ == "__main__":
