@@ -1,7 +1,7 @@
 import json
 from inventory import update_inventory, check_inventory
 from receipt import print_cart, print_menu, total_price_generator, print_cart_after_payment
-from payment import process_payment
+from payment import process_payment, transaction_id_creation, save_transaction, qris_payment
 
 # Load the price data from the JSON file
 with open("products.json", "r") as f:
@@ -36,6 +36,10 @@ def ask_repeat_order():
 
 def main():
 
+    store_location = "GHZJKT1"
+    store_timezone = "Asia/Jakarta"
+    transaction_id = transaction_id_creation(store_location)
+
     cart = []
     cart.append(str(ask_first_time()))
     add_order = ask_repeat_order()
@@ -54,11 +58,27 @@ def main():
         print("Sorry, we don't have enough ingredients to fulfill your order.")
         return
 
-    print_cart(cart, price_data)
+    print_cart(cart, price_data, transaction_id)
     subtotal, vat_service = total_price_generator(cart, price_data)
     total_price = subtotal + vat_service
-    pay_amount, change_final = process_payment(total_price)
-    print_cart_after_payment(cart, price_data, pay_amount, change_final)
+
+    while True:
+        try:
+            payment_choice = input(f"Please select payment method \n1. Cash \n2. QRIS \nEnter your choice:")
+            if payment_choice == "1":
+                pay_amount, change_final = process_payment(total_price)
+                print_cart_after_payment(cart, price_data, pay_amount, change_final, transaction_id)
+                save_transaction(cart, total_price, pay_amount, change_final, transaction_id, store_timezone, price_data)
+                break
+            elif payment_choice == "2":
+                qris_payment(total_price)
+                print_cart_after_payment(cart, price_data, total_price, 0, transaction_id)
+                save_transaction(cart, total_price, total_price, 0, transaction_id, store_timezone, price_data, payment_choice)
+                break
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+            continue
+
     update_inventory(cart, price_data, inventory_data)
 
 if __name__ == "__main__":
