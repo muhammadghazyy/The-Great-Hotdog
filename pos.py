@@ -1,6 +1,6 @@
 import json
 from inventory import update_inventory, check_inventory
-from receipt import print_cart, print_menu, total_price_generator, print_cart_after_payment
+from receipt import print_cart, print_menu, total_price_generator
 from payment import process_payment, transaction_id_creation, save_transaction, qris_payment
 
 # Load the price data from the JSON file
@@ -59,20 +59,19 @@ def main():
         return
 
     print_cart(cart, price_data, transaction_id)
-    subtotal, vat_service = total_price_generator(cart, price_data)
-    total_price = subtotal + vat_service
+    total_price, subtotal, vat_service = total_price_generator(cart, price_data)
 
     while True:
         try:
             payment_choice = input(f"Please select payment method \n1. Cash \n2. QRIS \nEnter your choice:")
             if payment_choice == "1":
                 pay_amount, change_final = process_payment(total_price)
-                print_cart_after_payment(cart, price_data, pay_amount, change_final, transaction_id)
-                save_transaction(cart, total_price, pay_amount, change_final, transaction_id, store_timezone, price_data)
+                print_cart(cart, price_data,  transaction_id, pay_amount, change_final)
+                save_transaction(cart, total_price, pay_amount, change_final, transaction_id, store_timezone, price_data, payment_choice)
                 break
             elif payment_choice == "2":
                 qris_payment(total_price)
-                print_cart_after_payment(cart, price_data, total_price, 0, transaction_id)
+                print_cart(cart, price_data, transaction_id, total_price, 0)
                 save_transaction(cart, total_price, total_price, 0, transaction_id, store_timezone, price_data, payment_choice)
                 break
         except ValueError:

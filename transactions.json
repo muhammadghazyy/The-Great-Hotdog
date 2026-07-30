@@ -198,5 +198,69 @@
         "change": 0,
         "date": "2026-07-29 20:58:34",
         "payment_type": "QRIS"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260730-211507732",
+        "cart": {
+            "3": {
+                "quantity": 1,
+                "price": 10000
+            }
+        },
+        "subtotal": 11200.0,
+        "pay_amount": 11200.0,
+        "change": 0,
+        "date": "2026-07-30 21:15:13",
+        "payment_type": "QRIS"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260730-212630897",
+        "cart": {
+            "3": {
+                "quantity": 1,
+                "price": 10000
+            }
+        },
+        "subtotal": 11200.0,
+        "pay_amount": 15000.0,
+        "change": 3800.0,
+        "date": "2026-07-30 21:26:34",
+        "payment_type": "Cash"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260730-212640263",
+        "cart": {
+            "1": {
+                "quantity": 3,
+                "price": 60000
+            },
+            "2": {
+                "quantity": 3,
+                "price": 75000
+            },
+            "3": {
+                "quantity": 2,
+                "price": 20000
+            }
+        },
+        "subtotal": 173600.0,
+        "pay_amount": 200000.0,
+        "change": 26400.0,
+        "date": "2026-07-30 21:26:49",
+        "payment_type": "Cash"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260730-212653028",
+        "cart": {
+            "3": {
+                "quantity": 1,
+                "price": 10000
+            }
+        },
+        "subtotal": 11200.0,
+        "pay_amount": 11200.0,
+        "change": 0,
+        "date": "2026-07-30 21:27:23",
+        "payment_type": "QRIS"
     }
 ]
