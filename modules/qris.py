@@ -4,65 +4,10 @@ import json
 import tkinter as tk
 import tkinter as tk
 import qrcode
+# import cv2
+# import easyocr
+import re
 from PIL import Image, ImageTk
-
-def process_payment(total_price):
-    while True:
-        try:
-            input_amount = float(input("Please enter the payment amount: "))
-            if input_amount >= total_price:
-                change = input_amount - total_price
-                print(f"Payment successful! Your change is Rp {change:,}.")
-                return input_amount, change
-            else:
-                print(f"Insufficient payment. You need to pay at least Rp {total_price:,}.")
-        except ValueError:
-            print("Invalid input. Please enter a valid number.")
-    
-
-def transaction_id_creation(store_location, timezone = "Asia/Jakarta"):
-    
-
-    utc7 = pytz.timezone(timezone)
-    now = datetime.now(utc7)
-    return f"{store_location}-{now.strftime('%Y%m%d-%H%M%S')}{now.microsecond // 1000:03d}"
-
-def save_transaction(cart, total_price, pay_amount, change_final, transaction_id, timezone, price_data, payment_choice):
-
-    utc7 = pytz.timezone(timezone)
-    now = datetime.now(utc7)
-
-    with open("transactions.json", "r") as t:
-        transaction_data = json.load(t)
-
-    total_item = {}
-    for item in cart:
-        if item not in total_item.keys():
-            total_item[item] = 1
-        elif item in total_item.keys():
-            total_item[item] += 1
-    for item, quantity in total_item.items():
-        item_data = price_data[item]
-        total_item[item] = {
-            "quantity": quantity,
-            "price": item_data['price'] * quantity
-        }
-        
-
-    to_insert_to_transaction_data = {
-        "transaction_id": transaction_id,
-        "cart": total_item,
-        "subtotal": total_price,
-        "pay_amount": pay_amount,
-        "change": change_final,
-        "date": f"{now.strftime('%Y-%m-%d %H:%M:%S')}",
-        "payment_type": f"{'Cash' if payment_choice == '1' else 'QRIS'}"
-    }
-
-    transaction_data.append(to_insert_to_transaction_data)
-
-    with open("transactions.json", "w") as t:
-        json.dump(transaction_data, t, indent=4)
 
 
 def convert_static_to_dynamic_qris(static_qris_str: str, amount: int) -> str:
@@ -125,7 +70,7 @@ def qris_payment(total_price):
     ).pack(pady=5)
 
     # RAW STATIC QRIS payload string (Obtain this by scanning your static QRIS once)
-    STATIC_QRIS_DATA = "00020101021126710019ID.CO.BANKJATIM.WWW01189360011400000062670215ID20200000592050303UME51440014ID.CO.QRIS.WWW0215ID20200435487890303UME5204866153033605802ID5919INFAQ LAZISMU JATIM6008SURABAYA61056023462070703A016304DEAE"
+    STATIC_QRIS_DATA = "00020101021126610014COM.GO-JEK.WWW01189360091437022285980210G7022285980303UMI51440014ID.CO.QRIS.WWW0215ID10265321540140303UMI5204839853033605802ID5925SYAFIRA TASYA, Organisasi6013JAKARTA TIMUR61051343062070703A016304FD50"
 
     # Generate Dynamic Payload
     dynamic_payload = convert_static_to_dynamic_qris(
@@ -156,3 +101,67 @@ def qris_payment(total_price):
 
     root.mainloop()
     return total_price, 0
+
+
+
+# 
+
+def verify_qris_screen(frame, target_amount=150000):
+    # Convert frame to grayscale for OCR processing
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Perform OCR on the frame
+    results = reader.readtext(gray)
+    
+    detected_text = " ".join([res[1].lower() for res in results])
+    print(f"[OCR Raw Text]: {detected_text}")
+
+    # Check 1: Success Keywords used by Indonesian Banks/E-Wallets
+    success_keywords = ["berhasil", "success", "transaksi berhasil", "pembayaran berhasil"]
+    has_success = any(keyword in detected_text for keyword in success_keywords)
+
+    # Check 2: Match Target Amount (handling formatted numbers like 150.000 or 150000)
+    target_str = f"{target_amount:,}".replace(",", ".") # "150.000"
+    has_amount = target_str in detected_text or str(target_amount) in detected_text
+
+    if has_success and has_amount:
+        return True, detected_text
+
+    return False, detected_text
+
+# --- Camera Loop Demo ---
+
+# Initialize EasyOCR reader (English + Indonesian)
+# reader = easyocr.Reader(['en', 'id'], gpu=False)
+# cap = cv2.VideoCapture(0)  # Use 0 for default webcam
+
+# TARGET_AMOUNT = 150000
+
+# print("Point phone screen with successful payment at the camera...")
+
+# while True:
+#     ret, frame = cap.read()
+#     if not ret:
+#         break
+
+#     # Optional: Draw a target bounding box guide on video stream
+#     h, w, _ = frame.shape
+#     cv2.rectangle(frame, (w//4, h//4), (3*w//4, 3*h//4), (0, 255, 0), 2)
+
+#     # Run check when frame is ready
+#     is_valid, raw_text = verify_qris_screen(frame, TARGET_AMOUNT)
+
+#     if is_valid:
+#         print("\n[SUCCESS] Payment screen verified! Closing window...")
+#         cv2.putText(frame, "PAYMENT VERIFIED!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
+#         cv2.imshow("Camera Verification", frame)
+#         cv2.waitKey(2000)  # Show success state briefly
+#         break
+
+#     cv2.imshow("Camera Verification", frame)
+
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+
+# cap.release()
+# cv2.destroyAllWindows()

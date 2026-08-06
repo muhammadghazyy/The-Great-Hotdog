@@ -262,5 +262,111 @@
         "change": 0,
         "date": "2026-07-30 21:27:23",
         "payment_type": "QRIS"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260806-205253711",
+        "cart": {
+            "3": {
+                "quantity": 1,
+                "price": 10000
+            }
+        },
+        "subtotal": 11200.0,
+        "pay_amount": 15000.0,
+        "change": 3800.0,
+        "date": "2026-08-06 20:52:59",
+        "payment_type": "Cash"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260806-205302082",
+        "cart": {
+            "3": {
+                "quantity": 1,
+                "price": 10000
+            }
+        },
+        "subtotal": 11200.0,
+        "pay_amount": 11200.0,
+        "change": 0,
+        "date": "2026-08-06 20:53:32",
+        "payment_type": "QRIS"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260806-205702920",
+        "cart": {
+            "3": {
+                "quantity": 1,
+                "price": 10000
+            }
+        },
+        "subtotal": 11200.0,
+        "pay_amount": 15000.0,
+        "change": 3800.0,
+        "date": "2026-08-06 20:57:06",
+        "payment_type": "Cash"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260806-205844595",
+        "cart": {
+            "2": {
+                "quantity": 1,
+                "price": 25000
+            },
+            "1": {
+                "quantity": 2,
+                "price": 40000
+            }
+        },
+        "subtotal": 72800.0,
+        "pay_amount": 72800.0,
+        "change": 0,
+        "date": "2026-08-06 20:58:50",
+        "payment_type": "QRIS"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260806-205917966",
+        "cart": {
+            "2": {
+                "quantity": 3,
+                "price": 75000
+            }
+        },
+        "subtotal": 84000.0,
+        "pay_amount": 84000.0,
+        "change": 0,
+        "date": "2026-08-06 20:59:23",
+        "payment_type": "QRIS"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260806-210400353",
+        "cart": {
+            "3": {
+                "quantity": 1,
+                "price": 10000
+            }
+        },
+        "subtotal": 11200.0,
+        "pay_amount": 12000.0,
+        "change": 800.0,
+        "date": "2026-08-06 21:04:07",
+        "payment_type": "Cash"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260806-210411248",
+        "cart": {
+            "2": {
+                "quantity": 4,
+                "price": 100000
+            },
+            "1": {
+                "quantity": 1,
+                "price": 20000
+            }
+        },
+        "subtotal": 134400.0,
+        "pay_amount": 134400.0,
+        "change": 0,
+        "date": "2026-08-06 21:04:17",
+        "payment_type": "QRIS"
     }
 ]

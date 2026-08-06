@@ -1,6 +1,7 @@
 import json
 
 def check_inventory(cart, price_data, inventory_data):
+    """ Check if there are enough ingredients in the inventory to fulfill the order in the cart. """
     used_ingredients = {}
     for item in cart:
         recipe = price_data[item]['recipe']
@@ -16,6 +17,7 @@ def check_inventory(cart, price_data, inventory_data):
     return True
 
 def update_inventory(cart, price_data, inventory_data):
+    """ Update the inventory by subtracting the used ingredients based on the order in the cart. """
     used_ingredients = {}
     for item in cart:
         recipe = price_data[item]['recipe']
@@ -28,5 +30,5 @@ def update_inventory(cart, price_data, inventory_data):
     for ingredient, quantity in used_ingredients.items():
         inventory_data[ingredient] -= quantity
 
-    with open("inventory.json", "w") as t:
+    with open("data/inventory.json", "w") as t:
         json.dump(inventory_data, t, indent=4)

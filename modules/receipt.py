@@ -1,17 +1,21 @@
 def print_menu(price_data):
+    """ Print the menu of available items with their prices. """
     print("Menu:")
     for key, item in price_data.items():
         print(f"{key}. {item['name']:<30} Rp {item['price']:,}")
 
-def total_price_generator(cart, price_data):
+def total_price_generator(cart, price_data, current_vat):
+    """ Calculate the total price of the items in the cart, including VAT and service charge. """
     subtotal = sum(price_data[item]['price'] for item in cart)
-    vat = subtotal*0.12
+    vat = subtotal*current_vat
     total = subtotal + vat
     return total, subtotal, vat
 
     
 
-def print_cart(cart, price_data, transaction_id, pay_amount=None, change=None):
+def print_cart(cart, price_data, transaction_id, pay_amount=None, change=None, vat=0.12):
+    """ Print the details of the cart, including items, quantities, prices, subtotal, VAT, total price, payment amount, and change. """ 
+
 
     food_check = any(price_data[item]['type'] == 'food' for item in cart)
     drink_check = any(price_data[item]['type'] == 'drink' for item in cart)
@@ -48,7 +52,7 @@ def print_cart(cart, price_data, transaction_id, pay_amount=None, change=None):
     else:
         pass
 
-    subtotal, vat_service = total_price_generator(cart, price_data)
+    total,subtotal, vat_service = total_price_generator(cart, price_data, vat)
 
     print("\n=============================== Total Price ===============================")
     print(f"{'Subtotal':<50} Rp {round(subtotal):,}")
