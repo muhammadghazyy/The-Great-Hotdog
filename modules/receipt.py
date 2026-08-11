@@ -11,8 +11,6 @@ def total_price_generator(cart, price_data, current_vat):
     total = subtotal + vat
     return total, subtotal, vat
 
-    
-
 def print_cart(cart, price_data, transaction_id, pay_amount=None, change=None, vat=0.12):
     """ Print the details of the cart, including items, quantities, prices, subtotal, VAT, total price, payment amount, and change. """ 
 
