@@ -454,5 +454,37 @@
         "change": 7200.0,
         "date": "2026-08-19 21:12:47",
         "payment_type": "Cash"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260819-211809429",
+        "cart": {
+            "1": {
+                "quantity": 1,
+                "price": 20000
+            }
+        },
+        "subtotal": 22400.0,
+        "pay_amount": 25000.0,
+        "change": 2600.0,
+        "date": "2026-08-19 21:18:15",
+        "payment_type": "Cash"
+    },
+    {
+        "transaction_id": "GHZJKT1-20260819-211819679",
+        "cart": {
+            "2": {
+                "quantity": 1,
+                "price": 25000
+            },
+            "3": {
+                "quantity": 1,
+                "price": 10000
+            }
+        },
+        "subtotal": 39200.0,
+        "pay_amount": 40000.0,
+        "change": 800.0,
+        "date": "2026-08-19 21:18:32",
+        "payment_type": "Cash"
     }
 ]
