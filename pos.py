@@ -47,45 +47,50 @@ def main():
 
     transaction_id = transaction_id_creation(store_location)
 
-    cart = []
-    cart.append(str(ask_first_time()))
-    add_order = ask_repeat_order()
-
     while True:
-        if add_order.lower() == "n":
+        cart = []
+        cart.append(str(ask_first_time()))
+        add_order = ask_repeat_order()
+
+        while True:
+            if add_order.lower() == "n":
+                break
+            if add_order in price_data.keys():
+                cart.append(str(add_order))
+                add_order = ask_repeat_order()
+            else:
+                print("Invalid order. Please try again.")
+                add_order = ask_repeat_order()
+
+        if not check_inventory(cart, price_data, inventory_data):
+            print("Sorry, we don't have enough ingredients to fulfill your order.")
+            return
+
+        print_cart(cart, price_data, transaction_id, vat=vat)
+        total_price, subtotal, vat_service = total_price_generator(cart, price_data, vat)
+
+        while True:
+            try:
+                payment_choice = input(f"Please select payment method \n1. Cash \n2. QRIS \nEnter your choice:")
+                if payment_choice == "1":
+                    pay_amount, change_final = process_payment(total_price)
+                    print_cart(cart, price_data,  transaction_id, pay_amount, change_final, vat)
+                    save_transaction(cart, total_price, pay_amount, change_final, transaction_id, store_timezone, price_data, payment_choice)
+                    break
+                elif payment_choice == "2":
+                    qris_payment(total_price)
+                    print_cart(cart, price_data, transaction_id, total_price, 0, vat)
+                    save_transaction(cart, total_price, total_price, 0, transaction_id, store_timezone, price_data, payment_choice)
+                    break
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+                continue
+
+        update_inventory(cart, price_data, inventory_data)
+
+        continue_order = input("Next Order? Press y to Continue or n to Finish: ")
+        if continue_order.lower() == "n":
             break
-        if add_order in price_data.keys():
-            cart.append(str(add_order))
-            add_order = ask_repeat_order()
-        else:
-            print("Invalid order. Please try again.")
-            add_order = ask_repeat_order()
-
-    if not check_inventory(cart, price_data, inventory_data):
-        print("Sorry, we don't have enough ingredients to fulfill your order.")
-        return
-
-    print_cart(cart, price_data, transaction_id, vat=vat)
-    total_price, subtotal, vat_service = total_price_generator(cart, price_data, vat)
-
-    while True:
-        try:
-            payment_choice = input(f"Please select payment method \n1. Cash \n2. QRIS \nEnter your choice:")
-            if payment_choice == "1":
-                pay_amount, change_final = process_payment(total_price)
-                print_cart(cart, price_data,  transaction_id, pay_amount, change_final, vat)
-                save_transaction(cart, total_price, pay_amount, change_final, transaction_id, store_timezone, price_data, payment_choice)
-                break
-            elif payment_choice == "2":
-                qris_payment(total_price)
-                print_cart(cart, price_data, transaction_id, total_price, 0, vat)
-                save_transaction(cart, total_price, total_price, 0, transaction_id, store_timezone, price_data, payment_choice)
-                break
-        except ValueError:
-            print("Invalid input. Please enter a valid number.")
-            continue
-
-    update_inventory(cart, price_data, inventory_data)
 
 if __name__ == "__main__":
     main()
